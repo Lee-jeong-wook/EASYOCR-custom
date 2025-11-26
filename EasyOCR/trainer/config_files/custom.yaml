@@ -1,0 +1,88 @@
+#찾을 숫자
+number: '0123456789'
+#찾을 기호
+symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ €"
+#찾을 문자
+lang_list: ['ko']
+
+character_list: "0123456789가나다라마거너더러머버서어저고노도로모보소오조구누두루무부수우주하허호바사아자배강경광구기남대덕육동등마무문부북산서세수시울원인전제주창천충평포하해영차카안관파양금타악계연지김미홀추중진신은퍼종외교벌용성송목작청명황귀함풍치람롬름리별운봉증옥음읍임실순례장화릉의통령합녕초"
+# pth 파일 저장될 위치
+experiment_name: 'en_filtered'
+# 훈련 데이터
+train_data: 'all_data'
+# 검증 데이터
+valid_data: 'all_data/en_val'
+# seed 고정
+manualSeed: 1111
+workers: 1
+#반복 한 번당 학습 횟수
+batch_size: 8 #32
+# 반복 횟수
+num_iter: 300000
+# 검증 실시 주기
+valInterval: 20000
+# fine tuning시 활용할 기존 모델
+saved_model: '' #'saved_models/en_filtered/iter_300000.pth'
+# fine tuning 여부
+FT: False
+# 커스텀 옵티마이저 사용 여부
+optim: False # default is Adadelta
+# 학습률 
+lr: 1.
+# Adam 옵티마이저 모멘텀 계수
+beta1: 0.9
+# Adam 옵티마이저 감쇠율
+rho: 0.95
+# 0으로 난는 것 방지용
+eps: 0.00000001
+# 그래디언트 임계값
+grad_clip: 5
+#Data processing
+#데이터셋 폴더 명
+select_data: 'en_train_filtered' # this is dataset folder in train_data
+# 여러 데이터셋 사용 시 데이터셋 샘플링 비율
+batch_ratio: '1' 
+# 전체 데이터중 사용 비율
+total_data_usage_ratio: 1.0
+# 최대 문자열 길이
+batch_max_length: 25
+# 이미지 크기
+imgH: 32
+imgW: 100
+# 이미지 컬러
+rgb: False
+# 대비 조정 여부
+contrast_adjust: False
+#대소문자 구분
+sensitive: True
+# 짧은 텍스트를 배치 최대 길이에 맞추기 위해 빈 공간을 채웁니다
+PAD: True
+contrast_adjust: 0.0
+# 데이터 필터링 비활성화 여부, false면 이상 데이터 제거
+data_filtering_off: False
+# Model Architecture
+# 이미지 변환 모듈
+Transformation: 'TPS'
+#특징 추출 모듈
+FeatureExtraction: 'ResNet'
+#시퀀스 모델링 모듈
+SequenceModeling: 'BiLSTM'
+# 예측 방법
+Prediction: 'Attn'
+# TPS 변환에 사용할 기준점- Transformation이 TPS일 경우에만 활성화
+num_fiducial: 20
+network_params:
+  # 입력 이미지 채널- 흑백: 1, -컬러: 3
+  input_channel: 1
+  #특징 맵 채널 수
+  output_channel: 256
+  # 은닉층 크기
+  hidden_size: 256
+# 디코딩 전략
+decode: 'greedy'
+# 새 예측 헤드 사용 여부
+new_prediction: false
+# 특징 추출 레이어 동결 여부- True일 시 업데이트 X
+freeze_FeatureFxtraction: False
+# 시퀀스 모델링 레이어 동결 여부- True일 시 업데이트 X
+freeze_SequenceModeling: False  
