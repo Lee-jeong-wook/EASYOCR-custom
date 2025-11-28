@@ -26,7 +26,7 @@ saved_model: '' #'saved_models/en_filtered/iter_300000.pth'
 # fine tuning 여부
 FT: False
 # 커스텀 옵티마이저 사용 여부
-optim: False # default is Adadelta
+optim: 'adadelta' # default is Adadelta
 # 학습률 
 lr: 1.
 # Adam 옵티마이저 모멘텀 계수
@@ -56,10 +56,10 @@ contrast_adjust: False
 #대소문자 구분
 sensitive: True
 # 짧은 텍스트를 배치 최대 길이에 맞추기 위해 빈 공간을 채웁니다
-PAD: True
-contrast_adjust: 0.0
+PAD: False
+contrast_adjust: 1.0
 # 데이터 필터링 비활성화 여부, false면 이상 데이터 제거
-data_filtering_off: False
+data_filtering_off: True
 # Model Architecture
 # 이미지 변환 모듈
 Transformation: 'TPS'
@@ -70,7 +70,7 @@ SequenceModeling: 'BiLSTM'
 # 예측 방법
 Prediction: 'Attn'
 # TPS 변환에 사용할 기준점- Transformation이 TPS일 경우에만 활성화
-num_fiducial: 20
+num_fiducial: 24
 network_params:
   # 입력 이미지 채널- 흑백: 1, -컬러: 3
   input_channel: 1

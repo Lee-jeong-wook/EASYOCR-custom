@@ -7,7 +7,7 @@ import torchvision.transforms as transforms
 import numpy as np
 from collections import OrderedDict
 import importlib
-from .utils import CTCLabelConverter
+from .utils import CTCLabelConverter, AttnLabelConverter
 import math
 
 def custom_mean(x):
@@ -104,11 +104,12 @@ def recognizer_predict(model, converter, test_loader, batch_max_length,\
         for image_tensors in test_loader:
             batch_size = image_tensors.size(0)
             image = image_tensors.to(device)
-            # For max length prediction
+            
             length_for_pred = torch.IntTensor([batch_max_length] * batch_size).to(device)
             text_for_pred = torch.LongTensor(batch_size, batch_max_length + 1).fill_(0).to(device)
 
-            preds = model(image, text_for_pred)
+            # ✅ is_train=False 명시적으로 추가!
+            preds = model(image, text_for_pred, is_train=False)
 
             # Select max probabilty (greedy decoding) then decode index to character
             preds_size = torch.IntTensor([preds.size(1)] * batch_size)
@@ -122,10 +123,9 @@ def recognizer_predict(model, converter, test_loader, batch_max_length,\
             preds_prob = torch.from_numpy(preds_prob).float().to(device)
 
             if decoder == 'greedy':
-                # Select max probabilty (greedy decoding) then decode index to character
+                # Attention 디코딩: preds에서 직접 argmax
                 _, preds_index = preds_prob.max(2)
-                preds_index = preds_index.view(-1)
-                preds_str = converter.decode_greedy(preds_index.data.cpu().detach().numpy(), preds_size.data)
+                preds_str = converter.decode(preds_index, length_for_pred)
             elif decoder == 'beamsearch':
                 k = preds_prob.cpu().detach().numpy()
                 preds_str = converter.decode_beamsearch(k, beamWidth=beamWidth)
@@ -155,6 +155,8 @@ def get_recognizer(recog_network, network_params, character,\
                    device = 'cpu', quantize = True):
 
     converter = CTCLabelConverter(character, separator_list, dict_list)
+    #고쳤음
+    converter = AttnLabelConverter(character)
     num_class = len(converter.character)
 
     if recog_network == 'generation1':
