@@ -152,11 +152,11 @@ def recognizer_predict(model, converter, test_loader, batch_max_length,\
 
 def get_recognizer(recog_network, network_params, character,\
                    separator_list, dict_list, model_path,\
-                   device = 'cpu', quantize = True):
-
-    converter = CTCLabelConverter(character, separator_list, dict_list)
-    #고쳤음
-    converter = AttnLabelConverter(character)
+                   device = 'cpu', quantize = True, prediction='CTC'):
+    if 'CTC' in prediction:
+        converter = CTCLabelConverter(character, separator_list, dict_list)
+    else:
+        converter = AttnLabelConverter(character)
     num_class = len(converter.character)
 
     if recog_network == 'generation1':
@@ -166,7 +166,6 @@ def get_recognizer(recog_network, network_params, character,\
     else:
         model_pkg = importlib.import_module(recog_network)
     model = model_pkg.Model(num_class=num_class, **network_params)
-
     if device == 'cpu':
         state_dict = torch.load(model_path, map_location=device, weights_only=False)
         new_state_dict = OrderedDict()

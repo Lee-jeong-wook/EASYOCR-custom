@@ -78,7 +78,7 @@ def train(opt, show_number = 2, amp=False):
         else:
             model.load_state_dict(pretrained_dict)
         if opt.new_prediction:
-            model.module.Prediction = nn.Linear(model.module.SequenceModeling_output, opt.num_class)  
+            model.module.Prediction = nn.Linear(model.module.SequenceModeling_output, opt.num_class)
             for name, param in model.module.Prediction.named_parameters():
                 if 'bias' in name:
                     init.constant_(param, 0.0)

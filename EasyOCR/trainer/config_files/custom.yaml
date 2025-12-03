@@ -68,6 +68,7 @@ FeatureExtraction: 'ResNet'
 #시퀀스 모델링 모듈
 SequenceModeling: 'BiLSTM'
 # 예측 방법
+# 현재 EasyOCR은 CTC 이외는 제공하지 않습니다.
 Prediction: 'Attn'
 # TPS 변환에 사용할 기준점- Transformation이 TPS일 경우에만 활성화
 num_fiducial: 24
