@@ -33,7 +33,7 @@ class Reader(object):
                  user_network_directory=None, detect_network="craft", 
                  recog_network='standard', download_enabled=True, 
                  detector=True, recognizer=True, verbose=True, 
-                 quantize=True, cudnn_benchmark=False, prediction='CTC'):
+                 quantize=True, cudnn_benchmark=False):
         """Create an EasyOCR Reader
 
         Parameters:
@@ -207,6 +207,8 @@ class Reader(object):
             self.setLanguageList(lang_list, recog_config)
 
         dict_list = {}
+
+        prediction = recog_config['Prediction']
         for lang in lang_list:
             dict_list[lang] = os.path.join(BASE_PATH, 'dict', lang + ".txt")
 
